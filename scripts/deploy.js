@@ -14,12 +14,17 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const NFTMarket = await hre.ethers.getContractFactory("NFTMarket");
+  const nftMarket = await NFTMarket.deploy();
 
-  await greeter.deployed();
+  await nftMarket.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("nftMarket deployed to:", nftMarket.address);
+
+  const NFT = await hre.ethers.getContractFactory("NFT");
+  const nft = await NFT.deploy(nftMarket.address);
+  await nft.deployed();
+  console.log("nft deployed to:", nft.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -30,3 +35,8 @@ main()
     console.error(error);
     process.exit(1);
   });
+
+  //to test the client side UI go to a terminal window and run npx hardhad node 
+  //in another terminal window use the command npx hardhat run scripts/deploy.js --network localhost
+  //copy the nft market address and the nft address and past it into the config.js file
+  //to test it out on the client side run npm run dev from a terminal window
